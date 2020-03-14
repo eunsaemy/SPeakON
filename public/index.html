@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+    <head>
+        <title>main</title>
+        <meta charset = "utf-8"/>
+            <!-- Compiled and minified CSS -->
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+            <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div id = "header">
+            <h1>Hi Andy</h1>
+            <div id = "background">
+                <img src = "https://github.com/eunsaemy/cmd-f/blob/master/Pic/background.png?raw=true" width = "1024" height = "250"/>
+            </div>
+        <div id = "content"></div>
+
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.10.0/firebase-database.js"></script>
+        
+        <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+                apiKey: "AIzaSyCdiV56QkjhxLH_7lFWYdmglW2EuIetwwE",
+                authDomain: "child-61df8.firebaseapp.com",
+                databaseURL: "https://andyv2.firebaseio.com",
+                projectId: "andyv2",
+                storageBucket: "andyv2.appspot.com",
+                messagingSenderId: "965138880565",
+                appId: "1:965138880565:web:c72cd69dcd1e4722fff97c"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+
+            function getData() {
+                firebase.database().ref('items').once('value', function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        var childKey = childSnapshot.key;
+                        var childData = childSnapshot.val();
+
+                        // Returns thankyou, mommy, toilet
+                        var imageName = childData['itemName'];
+
+                        // Makes a div inside content div
+                        var block = document.createElement("div");
+                        content.appendChild(block);
+
+                    
+
+                        // Returns Pic/thankyou.jpg, Pic/mommy.jpg, Pic/toilet.jpg
+                        var url = childData['itemPhotoURL'];
+
+                        // Makes an img
+                        var image = document.createElement("img");
+                        image.setAttribute("src", url);
+                        block.appendChild(image);
+
+                        block.addEventListener("click", function() {
+                            //name: text-to-speech
+                            var msg = new SpeechSynthesisUtterance(imageName);
+                            //window.speechSynthesis.speak(msg);
+                            /* var voices = window.speechSynthesis.getVoices();
+                            speechSynthesis.getVoices().forEach(function(voice) {
+                            console.log(voice.name, voice.gender, voice.default ? voice.default :'');
+                            }); */
+                            var voices = window.speechSynthesis.getVoices();
+                            msg.voice = voices[3];
+
+                      
+                       //     msg.voice = speechSynthesis.getVoices().filter(function(voice) { return voice.name == "Google UK English Female";})[10];
+                            speechSynthesis.speak(msg);
+
+                            //border
+                        });
+                            // Assigns class name to block variable
+                            block.classList.add("z-depth-4", "block");
+                    });
+                });
+            }
+
+            getData();
+
+        </script>
+    </body>
+</html>
